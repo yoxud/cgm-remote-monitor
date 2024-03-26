@@ -8,18 +8,18 @@ x-logging:
   driver: json-file
 
 services:
-  mongo:
-    image: mongo:4.4
-    volumes:
-      - ${NS_MONGO_DATA_DIR:-./mongo-data}:/data/db:cached
-    logging: *default-logging
+ # mongo:
+ #   image: mongo:4.4
+ #   volumes:
+ #     - ${NS_MONGO_DATA_DIR:-./mongo-data}:/data/db:cached
+ #   logging: *default-logging
 
   nightscout:
     image: nightscout/cgm-remote-monitor:latest
     container_name: nightscout
     restart: always
-    depends_on:
-      - mongo
+ #   depends_on:
+ #     - mongo
     labels:
       - 'traefik.enable=true'
       # Change the below Host from `localhost` to be the web address where Nightscout is running.
@@ -32,6 +32,51 @@ services:
       ### Variables for the container
       NODE_ENV: production
       TZ: Etc/UTC
+           ### Yorgo
+      NIGHT_MODE: off
+      ALARM_TYPES: simple
+      ALARM_LOW: off
+      ALARM_HIGH: off
+      ALARM_URGENT_HIGH: off
+      ALARM_URGENT_LOW: off
+      ALARM_TIMEAGO_URGENT: off
+      ALARM_TIMEAGO_URGENT_MINS: 60
+      ALARM_TIMEAGO_WARN: off
+      ALARM_TIMEAGO_WARN_MINS: 15
+      API_SECRET: AbcHij272aaahhh272
+      BG_LOW: 55
+      BG_TARGET_BOTTOM: 80
+      BG_TARGET_TOP: 180
+      BG_HIGH: 260
+      #BRIDGE_USER_NAME: yorgo@le1640.com 
+      #BRIDGE_PASSWORD: aaahhh272 
+      #BRIDGE_SERVER: EU
+      CONNECT_SOURCE: dexcomshare
+      CONNECT_SHARE_ACCOUNT_NAME: yorgo@le1640.com
+      CONNECT_SHARE_PASSWORD: aaahhh272
+      CONNECT_SHARE_REGION: ous
+      CUSTOM_TITLE: Emma Xudous
+      DEVICESTATUS_ADVANCED: true
+      DISPLAY_UNITS: mmol
+      EDIT_MODE: on
+      ENABLE: basal dbsize rawbg iob maker bridge cob bwp cage iage sage boluscalc pushover treatmentnotify loop pump profile food openaps bage alexa override cors careportal
+      MONGO_CONNECTION: mongodb+srv://Yorgo:$AbcHij272@emmaxudous.9vamu.mongodb.net/?retryWrites=true&w=majority
+      MONGO_COLLECTION: entries
+      OPENAPS_ENABLE_ALERTS: false
+      OPENAPS_FIELDS: status-symbol status-label iob meal-assist rssi freq
+      PUMP_FIELDS: reservoir battery clock status device
+      PUMP_URGENT_BATT_P: 26
+      PUMP_WARN_CLOCK: 30
+      PUMP_URGENT_CLOCK: 60
+      PUMP_WARN_RES: 10
+      PUMP_URGENT_RES: 5
+      PUMP_ENABLE_ALERTS: false
+      SCALE_Y: linear
+      SHOW_RAWBG: never
+      SHOW_FORECAST: openaps
+      SHOW_PLUGINS: basal openaps iob cob cage sage iage boluscalc pump bage dbsize careportal
+      THEME: colors
+      TIME_FORMAT: 24
 
       ### Overridden variables for Docker Compose setup
       # The `nightscout` service can use HTTP, because we use `traefik` to serve the HTTPS
@@ -45,15 +90,15 @@ services:
       # The default connects to the `mongo` included in this docker-compose file.
       # If you change it, you probably also want to comment out the entire `mongo` service block
       # and `depends_on` block above.
-      MONGO_CONNECTION: mongodb://mongo:27017/nightscout
+      #MONGO_CONNECTION: mongodb://mongo:27017/nightscout
 
       # API_SECRET - A secret passphrase that must be at least 12 characters long.
-      API_SECRET: change_me
+      #API_SECRET: change_me
 
       ### Features
       # ENABLE - Used to enable optional features, expects a space delimited list, such as: careportal rawbg iob
       # See https://github.com/nightscout/cgm-remote-monitor#plugins for details
-      ENABLE: careportal rawbg iob
+      #ENABLE: careportal rawbg iob
 
       # AUTH_DEFAULT_ROLES (readable) - possible values readable, denied, or any valid role name.
       # When readable, anyone can view Nightscout without a token. Setting it to denied will require
@@ -76,7 +121,7 @@ services:
       - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
       - '--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json'
       # Change the below to match your email address
-      - '--certificatesresolvers.le.acme.email=example@example.com'
+      - '--certificatesresolvers.le.acme.email=yorgo@le1640.com'
     ports:
       - '443:443'
       - '80:80'
